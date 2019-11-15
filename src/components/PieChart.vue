@@ -21,7 +21,6 @@ export default {
     computed: {
         total() { return this.past + this.future },
         visdata() { 
-
             var now = moment();
             let start = moment(this.past)
             let end = moment(this.future)
@@ -33,7 +32,7 @@ export default {
             return [
             {
                 "label": [
-                    "Time since " + moment(this.past).format("MMM do YYYY"),
+                    "Time since " + moment(this.past).format("MMM Do YYYY"),
                     moment(this.past).fromNow(),
                     percentElapsed
                     
@@ -44,7 +43,7 @@ export default {
             },
             {
                 "label": [
-                    "Time until " + moment(this.future).format("MMM do YYYY"),
+                    "Time until " + moment(this.future).format("MMM Do YYYY"),
                     moment(this.future).fromNow()
                 ],
                 "value": this.until,
@@ -54,6 +53,10 @@ export default {
         ] },
         since() { return this.now - this.past },
         until() { return this.future - this.now }
+    },
+    watch: {
+        future: function() { this.redraw(); },
+        past: function() { this.redraw(); }
     },
     mounted() {
         this.redraw();
