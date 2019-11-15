@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{until}} {{future}}, {{since}} {{past}}
         <div id="replace"></div>
     </div>
 </template>
@@ -21,19 +20,31 @@ export default {
     }},
     computed: {
         total() { return this.past + this.future },
-        visdata() { return [
+        visdata() { 
+
+            var now = moment();
+            let start = moment(this.past)
+            let end = moment(this.future)
+            var totalMillisInRange = end.valueOf() - start.valueOf();
+            var elapsedMillis = now.valueOf() - start.valueOf();
+            // This will bound the number to 0 and 100
+            let percentElapsed = Math.max(0, Math.min(100, 100 * (elapsedMillis / totalMillisInRange)));
+            percentElapsed = percentElapsed.toFixed(4) + "%"
+            return [
             {
-                "label": ["past",
-                    moment(this.past),
-                    moment(this.past).toNow()
+                "label": [
+                    moment(this.past).format("MMM do YYYY"),
+                    moment(this.past).fromNow(),
+                    percentElapsed
+                    
                 ],
                 "value":  this.since,
                 "color": "#5179ad"
                 // "value":  Math.random()
             },
             {
-                "label": ["future",
-                    moment(this.future),
+                "label": [
+                    moment(this.future).format("MMM do YYYY"),
                     moment(this.future).fromNow()
                 ],
                 "value": this.until,
@@ -117,9 +128,9 @@ export default {
             text.enter()
                 .append("text")
                 .attr("dy", ".35em")
-                .text(function(d) {
-                    return d.data.label;
-                })
+                // .text(function(d) {
+                //     return d.data.label;
+                // })
                 .attr("transform", function(d) {
                     let pos = outerArc.centroid(d)
                     pos[0] = radius * (midAngle(d) < Math.PI ? 1 : -1);
@@ -127,7 +138,19 @@ export default {
                 })
                 .attr("text-anchor", function(d) {
                     return midAngle(d) < Math.PI ? "start":"end"
-                });
+                })
+                .attr("dominant-baseline", "middle")
+                .selectAll("tspan").data((d) => d.data.label)
+                    .enter().append("tspan")
+                    .text((d) => d)
+                    .attr("y", function(d, i, j) {
+                        let centerIndex = (j.length-1) / 2
+                        // console.log(centerIndex, i)
+                        if (i > centerIndex) return 22 * -(centerIndex - i)
+                        else if (i < centerIndex) return 22 * (i - centerIndex);
+                        else return 0;
+                    })
+                    .attr("x", 0);
 
             text.exit()
                 .remove();
@@ -143,19 +166,6 @@ export default {
                     var pos = outerArc.centroid(d);
                     pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
                     return [arc.centroid(d), outerArc.centroid(d), pos];
-                });
-
-            polyline.transition().duration(1000)
-                .attrTween("points", function(d){
-                    this._current = this._current || d;
-                    var interpolate = d3.interpolate(this._current, d);
-                    this._current = interpolate(0);
-                    return function(t) {
-                        var d2 = interpolate(t);
-                        var pos = outerArc.centroid(d2);
-                        pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
-                        return [arc.centroid(d2), outerArc.centroid(d2), pos];
-                    };			
                 });
             
             polyline.exit()
@@ -174,5 +184,8 @@ polyline{
 	stroke: black;
 	stroke-width: 2px;
 	fill: none;
+}
+tspan:first-child {
+    font-weight: bold;
 }
 </style>
