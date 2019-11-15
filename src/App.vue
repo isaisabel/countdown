@@ -1,18 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <!-- <script src="/countdown.js"></script> -->
+    <PieChart v-bind:future="future" v-bind:past="past"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import PieChart from './components/PieChart.vue'
+// let moment = require("moment");
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
+    name: 'app',
+    data() { return {
+        future: new Date(2021, 10, 1),
+        past: new Date(2019, 9, 3)
+    }},
+    mounted() {
+        
+    },
+    components: {
+        PieChart
+    }
 }
 </script>
 

@@ -1,5 +1,5 @@
 {
-  "name": "countdown",
+  "name": "countdownApp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.3.2",
+    "d3": "^5.12.0",
+    "moment": "^2.24.0",
     "vue": "^2.6.10"
   },
   "devDependencies": {
