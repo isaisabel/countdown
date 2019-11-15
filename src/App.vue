@@ -4,14 +4,10 @@
             <div>
                 <h1>past</h1>
                 <Datepicker v-model="past" v-bind:inline="true" v-bind:disabledDates="disabled.past"/>
-
-                {{past}}
             </div>
             <div>
                 <h1>future</h1>
                 <Datepicker v-model="future" v-bind:inline="true" v-bind:disabledDates="disabled.future"/>
-
-                {{future}}
             </div>
         </div>
         <div class="visualization">
