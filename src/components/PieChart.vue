@@ -33,7 +33,7 @@ export default {
             return [
             {
                 "label": [
-                    moment(this.past).format("MMM do YYYY"),
+                    "Time since " + moment(this.past).format("MMM do YYYY"),
                     moment(this.past).fromNow(),
                     percentElapsed
                     
@@ -44,7 +44,7 @@ export default {
             },
             {
                 "label": [
-                    moment(this.future).format("MMM do YYYY"),
+                    "Time until " + moment(this.future).format("MMM do YYYY"),
                     moment(this.future).fromNow()
                 ],
                 "value": this.until,
