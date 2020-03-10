@@ -30,8 +30,8 @@ export default {
         total() { return this.past + this.future },
         visdata() { 
             var now = moment();
-            let start = moment(this.past)
-            let end = moment(this.future)
+            let start = moment(this.past).endOf("day")
+            let end = moment(this.future).startOf("day")
             var totalMillisInRange = end.valueOf() - start.valueOf();
             var elapsedMillis = now.valueOf() - start.valueOf();
             // This will bound the number to 0 and 100

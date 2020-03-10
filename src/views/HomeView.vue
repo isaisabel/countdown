@@ -36,8 +36,8 @@ export default {
     name: 'HomeView',
     props: [],
     data() { return {
-        future: moment().add(1 + Math.floor(Math.random() * 31), "d").toDate(), //up to 1 month future
-        past: moment().subtract(1 + Math.floor(Math.random() * 31), "d").toDate(), //up to 1 month past
+        future: moment().add(1, "d").toDate(), //start of yesterday
+        past: moment().subtract(1, "d").toDate(), //start of tomorrow
         // disabled dates
         disabled: {
             past: {
@@ -114,6 +114,14 @@ h1 {
                 .up:not(.disabled):hover { background: #363238;}
             }
             .selected {color: black;}
+            .cell.day.disabled {
+                color: rgba(white, 0.5);
+            }
+            .cell.day.today {
+                color: white;
+                // font-weight: bold;
+                background: #363238;
+            }
         }
     }
 }
