@@ -134,6 +134,6 @@ h1 {
     width: 50%;
     margin: 0 auto;
     
-    @include swoosh-button(#44bbdd);
+    @include swoosh-button(#44bbdd, "up");
 }
 </style>

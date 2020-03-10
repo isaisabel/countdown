@@ -1,7 +1,9 @@
 <template>
-    <div class="pie-wrapper" v-bind:class="[pieWrapperClass]">
-        <a v-on:click="gohome()" class="back"><span>&#8249; choose a date</span></a>
-        <div id="replace"></div>
+    <div class="pie-wrapper" id="pie-wrapper" v-bind:class="[pieWrapperClass]">
+        <div class="svg-wrapper">
+            <div id="replace"></div>
+        </div>
+        <a v-on:click="gohome()" class="back"><span>choose dates</span></a>
     </div>
 </template>
 
@@ -14,16 +16,24 @@ export default {
     // props: ["future", "past"],
     data() { return {
         size: {
-            width: 1000,
             height: 500
         },
         now: new Date(),
-        pieWrapperClass: "transition in"
+        pieWrapperClass: "transition in",
+        uid: 0
     }},
     mounted() {
+        this.uid = Math.random()
         this.pieWrapperClass = "transition in";
         this.redraw();
         setTimeout(() => {this.pieWrapperClass = ""}, 1); //give it time to draw, and then remove the transition
+        let uid = this.uid;
+        window.addEventListener('resize', () => {
+            this.draw(uid)
+        });
+    },
+    beforeDestroy() {
+        this.uid = -1; //make sure a destroyed pieChart never gets to redraw
     },
     computed: {
         future () { return new Date(this.$route.query.future); },
@@ -79,15 +89,18 @@ export default {
             this.draw();
             // setTimeout(this.redraw, 1000);
         },
-        draw() {
+        draw(uid) {
+            if (uid && uid != this.uid) return; //resize function called but the chart has been unloaded
             var element = document.getElementById("replace");
                 element.innerHTML = "";
+            let windowWidth = window.innerWidth;
 
+            
             var margin = {top: 20, right: 20, bottom: 45, left: 40},
-                width = +this.size.width - margin.left - margin.right,
+                width = +windowWidth - margin.left - margin.right,
                 height = +this.size.height - margin.top - margin.bottom,
-                radius = Math.min(width, height) / 2;
-
+                radius = Math.min(width/3, height) / 2;
+            
             //select the unique ID provided by the alias
             var svg = d3.select("#replace").append("svg")
                 .attr("width", width)
@@ -203,10 +216,16 @@ export default {
 <style lang="scss">
 @import "./swoosh-button";
 .pie-wrapper {
+    display: flex;
+    flex-direction: column;
     width: 100vw;
+    height: 100vh;
     transition: all ease 0.5s;
     &.transition.in, &.transition.out {
         transform: translateX(100vw);
+    }
+    .svg-wrapper {
+        flex-grow: 1;
     }
 }
 polyline, line{
@@ -224,12 +243,14 @@ tspan:first-child {
 }
 
 .back {
-    position: absolute;
-    top: 100%;
+    margin: 0 auto;
+    width: 33vw;
+    // border-top-left-radius: 25px;
+    // border-top-right-radius: 25px;
     text-decoration: none;
     color: #44bbdd;
     padding: 10px;
-    @include swoosh-button(#44bbdd);
+    @include swoosh-button(#44bbdd, "down", 10px);
     
 }
 </style>
