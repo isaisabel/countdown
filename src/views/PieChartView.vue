@@ -9,8 +9,8 @@ import * as d3 from "d3";
 let moment = require("moment");
 
 export default {
-    name: 'PieChart',
-    props: ["future", "past"],
+    name: 'PieChartView',
+    // props: ["future", "past"],
     data() { return {
         size: {
             width: 1000,
@@ -19,6 +19,8 @@ export default {
         now: new Date()
     }},
     computed: {
+        future () { return new Date(this.$route.query.future); },
+        past () { return new Date(this.$route.query.past); },
         total() { return this.past + this.future },
         visdata() { 
             var now = moment();
@@ -28,26 +30,27 @@ export default {
             var elapsedMillis = now.valueOf() - start.valueOf();
             // This will bound the number to 0 and 100
             let percentElapsed = Math.max(0, Math.min(100, 100 * (elapsedMillis / totalMillisInRange)));
-            percentElapsed = percentElapsed.toFixed(4) + "%"
+            let formatPercent = function (pct) { return pct.toFixed(4) + "%"; }
             return [
             {
                 "label": [
-                    "Time since " + moment(this.past).format("MMM Do YYYY"),
+                    "Time since " + moment(this.past).format("MMM Do, YYYY"),
                     moment(this.past).fromNow(),
-                    percentElapsed
+                    formatPercent(percentElapsed)
                     
                 ],
                 "value":  this.since,
-                "color": "#5179ad"
+                "color": "#44bbdd"
                 // "value":  Math.random()
             },
             {
                 "label": [
-                    "Time until " + moment(this.future).format("MMM Do YYYY"),
-                    moment(this.future).fromNow()
+                    "Time until " + moment(this.future).format("MMM Do, YYYY"),
+                    moment(this.future).fromNow(),
+                    // formatPercent(100 - percentElapsed)
                 ],
                 "value": this.until,
-                "color": "#dddddd"
+                "color": "#363238"
                 // "value": Math.random()
             }
         ] },
@@ -78,8 +81,8 @@ export default {
 
             //select the unique ID provided by the alias
             var svg = d3.select("#replace").append("svg")
-                .attr("width", this.size.width)
-                .attr("height", this.size.height)
+                .attr("width", width)
+                .attr("height", height)
                 .append("g");
             svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -113,6 +116,7 @@ export default {
             slice.enter()
                 .insert("path")
                 .style("fill", function(d) { return d.data.color; })
+                // .style("stroke", "#353535")
                 .attr("class", "slice")
                 .attr("d", arc);
 
@@ -130,7 +134,6 @@ export default {
 
             text.enter()
                 .append("text")
-                .attr("dy", ".35em")
                 // .text(function(d) {
                 //     return d.data.label;
                 // })
@@ -174,6 +177,13 @@ export default {
             polyline.exit()
                 .remove();
 
+            // svg.selectAll(".lines")
+            //     .append("line")
+            //     .attr("transform", "translate(0," + -arc.innerRadius()() + ")")
+            //     .attr("x1", 0)
+            //     .attr("x2", 0)
+            //     .attr("y1", -2*arc.innerRadius()())
+            //     .attr("y2", 0)
 
         }
     }
@@ -182,13 +192,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-polyline{
-	opacity: .3;
-	stroke: black;
+polyline, line{
+	opacity: .6;
+	stroke: white;
 	stroke-width: 2px;
 	fill: none;
 }
+text {
+    fill: white;
+}
 tspan:first-child {
+    
     font-weight: bold;
 }
 </style>
