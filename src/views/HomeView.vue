@@ -36,8 +36,8 @@ export default {
     name: 'HomeView',
     props: [],
     data() { return {
-        future: moment().add(1 + Math.floor(Math.random() * 31), "d").toDate(), //7 days past
-        past: moment().subtract(1 + Math.floor(Math.random() * 31), "d").toDate(), //7 days future
+        future: moment().add(1 + Math.floor(Math.random() * 31), "d").toDate(), //up to 1 month future
+        past: moment().subtract(1 + Math.floor(Math.random() * 31), "d").toDate(), //up to 1 month past
         // disabled dates
         disabled: {
             past: {
