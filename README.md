@@ -1,4 +1,5 @@
 # countdown
+An application for visualizing time from a date in the past to a date in the future.
 
 ## Project setup
 ```
