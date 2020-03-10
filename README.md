@@ -1,4 +1,4 @@
-# countdown: [See the live app here!](https://isaisabel.github.io/countdown)
+# countdown: [see the live app here!](https://isaisabel.github.io/countdown)
 An application for visualizing time from a date in the past to a date in the future.
 
 ## Project setup
