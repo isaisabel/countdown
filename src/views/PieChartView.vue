@@ -1,5 +1,6 @@
 <template>
     <div class="pie-wrapper" v-bind:class="[pieWrapperClass]">
+        <a v-on:click="gohome()" class="back"><span>&#8249; choose a date</span></a>
         <div id="replace"></div>
     </div>
 </template>
@@ -17,10 +18,10 @@ export default {
             height: 500
         },
         now: new Date(),
-        pieWrapperClass: "transition"
+        pieWrapperClass: "transition in"
     }},
     mounted() {
-        this.pieWrapperClass = "transition";
+        this.pieWrapperClass = "transition in";
         this.redraw();
         setTimeout(() => {this.pieWrapperClass = ""}, 1); //give it time to draw, and then remove the transition
     },
@@ -69,6 +70,10 @@ export default {
     },
     
     methods: {
+        gohome() {
+            this.pieWrapperClass = "transition out";
+            setTimeout(() => {this.$router.push({ name: 'home'  })}, 500); //give it time to draw, and then remove the transition
+        },
         redraw() {
             this.now = new Date();
             this.draw();
@@ -196,9 +201,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+@import "./swoosh-button";
 .pie-wrapper {
+    width: 100vw;
     transition: all ease 0.5s;
-    &.transition {
+    &.transition.in, &.transition.out {
         transform: translateX(100vw);
     }
 }
@@ -214,5 +221,15 @@ text {
 tspan:first-child {
     
     font-weight: bold;
+}
+
+.back {
+    position: absolute;
+    top: 100%;
+    text-decoration: none;
+    color: #44bbdd;
+    padding: 10px;
+    @include swoosh-button(#44bbdd);
+    
 }
 </style>

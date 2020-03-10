@@ -48,13 +48,15 @@ export default {
                 to: new Date()
             }
         },
-        homeWrapperClass: ""
+        homeWrapperClass: "transition in"
     }},
-    computed: {
+    mounted() {
+        this.homeWrapperClass = "transition in";
+        setTimeout(() => {this.homeWrapperClass = ""}, 1); //give it time to draw, and then remove the transition
     },
     methods: {
         visualize() {
-            this.homeWrapperClass = "transition";
+            this.homeWrapperClass = "transition out";
             // wait for 500ms of transition
             setTimeout(() => {
                  this.$router.push({
@@ -75,6 +77,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+@import "./swoosh-button";
 .home-wrapper {
     transition: all ease 0.5s;
     &.transition {
@@ -130,34 +133,7 @@ h1 {
     border-top: 1px solid #ddd;
     width: 50%;
     margin: 0 auto;
-    transition: all 0.3s;
-    position: relative;
-    * { // any child  
-        z-index: 2;
-        position: relative;
-        // border-bottom: 3px solid color(primary);
-    } 
-    &:not(.disabled) { cursor: pointer; }
-    &.disabled { opacity: 0.5; }
-
-    &:after {
-        content: '';
-        position: absolute;
-        z-index: 1;
-        transition: all 0.3s;
-        width: 100%;
-        height: 0%;
-        left: 0;
-        top: 0;
-        background: #44bbdd;
-        // border-left: 1px solid #44bbdd;
-        // border-right: 1px solid #44bbdd;
-    }
-    &:not(.disabled):active, &:not(.disabled):hover { 
-        color: black;
-    }
-    &:not(.disabled):hover:after, &:not(.disabled):active:after {
-        height: 100%;
-    }
+    
+    @include swoosh-button(#44bbdd);
 }
 </style>
