@@ -1,4 +1,5 @@
 <template>
+<div class="home-wrapper" v-bind:class="[homeWrapperClass]">
     <table>
         <thead>
             <tr>
@@ -24,17 +25,19 @@
             </tr>
         </tfoot>
     </table>
+</div>
 </template>
 
 <script>
 import Datepicker from 'vuejs-datepicker';
+let moment = require("moment");
 
 export default {
     name: 'HomeView',
     props: [],
     data() { return {
-        future: new Date(2021, 10, 1),
-        past: new Date(2019, 9, 3),
+        future: moment().add(1 + Math.floor(Math.random() * 31), "d").toDate(), //7 days past
+        past: moment().subtract(1 + Math.floor(Math.random() * 31), "d").toDate(), //7 days future
         // disabled dates
         disabled: {
             past: {
@@ -44,19 +47,24 @@ export default {
             future: {
                 to: new Date()
             }
-        }
+        },
+        homeWrapperClass: ""
     }},
     computed: {
     },
     methods: {
         visualize() {
-             this.$router.push({
-                name: 'visualize', 
-                query: {
-                    past:  this.past.toISOString(),
-                    future: this.future.toISOString()
-                }
-            })
+            this.homeWrapperClass = "transition";
+            // wait for 500ms of transition
+            setTimeout(() => {
+                 this.$router.push({
+                    name: 'visualize', 
+                    query: {
+                        past:  this.past.toISOString(),
+                        future: this.future.toISOString()
+                    }
+                })
+            }, 500)
         }
     },
     components: {
@@ -67,6 +75,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+.home-wrapper {
+    transition: all ease 0.5s;
+    &.transition {
+        transform: translateX(-100vw);
+    }
+}
 table { 
     border-collapse: collapse; 
     width: 1px;

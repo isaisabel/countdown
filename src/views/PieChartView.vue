@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pie-wrapper" v-bind:class="[pieWrapperClass]">
         <div id="replace"></div>
     </div>
 </template>
@@ -16,8 +16,14 @@ export default {
             width: 1000,
             height: 500
         },
-        now: new Date()
+        now: new Date(),
+        pieWrapperClass: "transition"
     }},
+    mounted() {
+        this.pieWrapperClass = "transition";
+        this.redraw();
+        setTimeout(() => {this.pieWrapperClass = ""}, 1); //give it time to draw, and then remove the transition
+    },
     computed: {
         future () { return new Date(this.$route.query.future); },
         past () { return new Date(this.$route.query.past); },
@@ -61,9 +67,7 @@ export default {
         future: function() { this.redraw(); },
         past: function() { this.redraw(); }
     },
-    mounted() {
-        this.redraw();
-    },
+    
     methods: {
         redraw() {
             this.now = new Date();
@@ -192,6 +196,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+.pie-wrapper {
+    transition: all ease 0.5s;
+    &.transition {
+        transform: translateX(100vw);
+    }
+}
 polyline, line{
 	opacity: .6;
 	stroke: white;
