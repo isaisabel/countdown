@@ -20,29 +20,24 @@ export default {
         },
         now: new Date(),
         pieWrapperClass: "transition in",
-        uid: 0
+        reddrawToken: null
     }},
     mounted() {
-        this.uid = Math.random()
         this.pieWrapperClass = "transition in";
         this.redraw();
         setTimeout(() => {this.pieWrapperClass = ""}, 1); //give it time to draw, and then remove the transition
-        let uid = this.uid;
-        window.addEventListener('resize', () => {
-            this.draw(uid)
-        });
     },
     beforeDestroy() {
-        this.uid = -1; //make sure a destroyed pieChart never gets to redraw
+        clearTimeout(this.reddrawToken);
     },
     computed: {
-        future () { return new Date(this.$route.query.future); },
-        past () { return new Date(this.$route.query.past); },
+        future () { return moment(this.$route.query.future).startOf("day").toDate(); },
+        past () { return moment(this.$route.query.past).endOf("day").toDate(); },
         total() { return this.past + this.future },
         visdata() { 
             var now = moment();
-            let start = moment(this.past).endOf("day")
-            let end = moment(this.future).startOf("day")
+            let start = moment(this.past)
+            let end = moment(this.future)
             var totalMillisInRange = end.valueOf() - start.valueOf();
             var elapsedMillis = now.valueOf() - start.valueOf();
             // This will bound the number to 0 and 100
@@ -87,10 +82,10 @@ export default {
         redraw() {
             this.now = new Date();
             this.draw();
-            // setTimeout(this.redraw, 1000);
+            this.reddrawToken = setTimeout(this.redraw, 250);
         },
-        draw(uid) {
-            if (uid && uid != this.uid) return; //resize function called but the chart has been unloaded
+        draw() {
+            if (document.hidden) return; //don't draw if the document is hidden (minimized, etc)
             var element = document.getElementById("replace");
                 element.innerHTML = "";
             let windowWidth = window.innerWidth;
