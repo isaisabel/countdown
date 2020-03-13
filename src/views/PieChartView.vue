@@ -98,8 +98,8 @@ export default {
             
             //select the unique ID provided by the alias
             var svg = d3.select("#replace").append("svg")
-                .attr("width", width)
-                .attr("height", height)
+                .attr("width", windowWidth)
+                .attr("height", this.size.height)
                 .append("g");
             svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
