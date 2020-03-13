@@ -79,6 +79,7 @@ export default {
 <style lang="scss">
 @import "./swoosh-button";
 .home-wrapper {
+    overflow-x: hidden;
     transition: all ease 0.5s;
     &.transition {
         transform: translateX(-100vw);

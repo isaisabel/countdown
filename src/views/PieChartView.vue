@@ -211,6 +211,7 @@ export default {
 <style lang="scss">
 @import "./swoosh-button";
 .pie-wrapper {
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     width: 100vw;
