@@ -103,14 +103,14 @@ export default {
                 .append("g");
             svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-            // var g = svg.append("g")
-            //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var g = svg.append("g")
+                .attr("transform", "translate(0," + margin.top + ")");
             
-            svg.append("g")
+            g.append("g")
                 .attr("class", "slices");
-            svg.append("g")
+            g.append("g")
                 .attr("class", "labels");
-            svg.append("g")
+            g.append("g")
                 .attr("class", "lines");
 
             var pie = d3.pie()
